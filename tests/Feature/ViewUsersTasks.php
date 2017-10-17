@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Task;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,9 +19,9 @@ class ViewUsersTasks extends TestCase
     {
         // Preparar
         $user=factory(User::class)->create();
-        $tasks=factory(Task::class,5)->create();
+        $tasks=factory(Task::class,10)->create();
         $user->tasks()->saveMany($tasks);
-        
+
         // Executar
         $response = $this->get('user/'. $user->id .'/tasks');
 
