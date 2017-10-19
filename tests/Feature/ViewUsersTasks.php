@@ -7,9 +7,15 @@ use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+
+/**
+ * Class ViewUsersTasks
+ * @package Tests\Feature
+ */
 class ViewUsersTasks extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic test example.
      * @test
@@ -23,16 +29,19 @@ class ViewUsersTasks extends TestCase
         $user->tasks()->saveMany($tasks);
 
         // Executar
-        $response = $this->get('user/'. $user->id .'/tasks');
+//        $this->withoutExceptionHandling(); //Ensenyar errors
 
+        $response = $this->get('user/'. $user->id .'/tasks');
+//        $response->dump(); Ensenyar errors
         $response->assertSuccessful();
         $response->assertViewIs('user_tasks');
-        $response->assertViewHas('tasks',$user->tasks);
+        $response->assertViewHas('tasks', $user->tasks);
+        $response->assertViewHas('user', $user);
 
-        $response->assertSeeText($user->name. 'Tasks: ');
+        $response->assertSeeText($user->name. ' Tasks:');
 
         foreach ($tasks as $task) {
-            $response->assertSeeText($tasks->name);
+            $response->assertSeeText($task->name);
         }
 
         //Comprobar
